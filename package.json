@@ -10,5 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "youtube-dl": "^1.11.1",
+    "youtube-mp3-downloader": "^0.5.1"
   }
 }
