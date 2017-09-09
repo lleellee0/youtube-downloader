@@ -1,7 +1,7 @@
 {
-  "name": "youtube-downloader-api",
+  "name": "fyda",
   "version": "1.0.0",
-  "description": "youtube mp3 and mp4 download api",
+  "description": "Foorogrammer's Youtube Download Api",
   "main": "app.js",
   "dependencies": {
     "youtube-dl": "^1.11.1",
@@ -26,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/lleellee0/youtube-downloader/issues"
   },
-  "homepage": "https://github.com/lleellee0/youtube-downloader#readme"
+  "homepage": "https://steemit.com/@foorogrammer"
 }
