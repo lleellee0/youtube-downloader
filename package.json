@@ -1,15 +1,30 @@
 {
-  "name": "youtube-downloader",
+  "name": "youtube-downloader-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "youtube mp3 and mp4 download api",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "youtube-dl": "^1.11.1",
     "youtube-mp3-downloader": "^0.5.1"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lleellee0/youtube-downloader.git"
+  },
+  "keywords": [
+    "youtube",
+    "mp3",
+    "mp4",
+    "downloader"
+  ],
+  "author": "foorogrammer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lleellee0/youtube-downloader/issues"
+  },
+  "homepage": "https://github.com/lleellee0/youtube-downloader#readme"
 }
