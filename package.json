@@ -1,7 +1,7 @@
 {
   "name": "fyda",
-  "version": "1.0.0",
-  "description": "Foorogrammer's Youtube Download Api",
+  "version": "1.0.1",
+  "description": "Foorogrammer's Youtube Download API. Easy and Fast",
   "main": "app.js",
   "dependencies": {
     "youtube-dl": "^1.11.1",
