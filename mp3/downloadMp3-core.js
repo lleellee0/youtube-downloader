@@ -1,7 +1,7 @@
 var YoutubeMp3Downloader = require("youtube-mp3-downloader");
 
 const fs = require("fs");
-const conf = JSON.parse(fs.readFileSync('conf/conf.json'));
+const conf = JSON.parse(fs.readFileSync('node_modules/fyda/conf/conf.json'));
 
 var Downloader = function(outputPath) {
     var self = this;
