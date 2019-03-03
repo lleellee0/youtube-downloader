@@ -2,6 +2,7 @@ const log = require('./js/log.js');
 const fs = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
+const ytdl = require('ytdl-core');
 
 // Add Event Lintener
 let inputFakePath = document.getElementById("fake-path");
@@ -31,13 +32,16 @@ const downloadYoutube = () => {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
       for(let i = 0; i < $('.playlist-video').length; i++) {
+        log.addLog(`다음 파일을 진행중입니다. ${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`);
+        await ytdl('https://www.youtube.com' + $('.playlist-video')[i].attribs.href)
+          .pipe(fs.createWriteStream(`${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.${format}`))
         // 영상 URL
         // 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href
         console.log('https://www.youtube.com' + $('.playlist-video')[i].attribs.href);
 
         // 영상 제목
         // $('.yt-ui-ellipsis')[i].children[i].data.trim
-        console.log(($('.yt-ui-ellipsis')[i].children[0].data.trim()));
+        console.log($('.yt-ui-ellipsis')[i].children[0].data.trim());
       }
     } else {
       console.error(error);
