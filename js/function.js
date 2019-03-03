@@ -27,14 +27,18 @@ const downloadYoutube = () => {
   // 재생 목록은 window["ytInitialData"] 에 존재
   request({
     uri:playListUrl,
-  }, function (error, response, body) {
+  }, async (error, response, body) => {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
+      for(let i = 0; i < $('.playlist-video').length; i++) {
+        // 영상 URL
+        // 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href
+        console.log('https://www.youtube.com' + $('.playlist-video')[i].attribs.href);
 
-      // 영상 URL
-      // $('.playlist-video')[i].attribs.href
-      console.log($('.playlist-video')[0].attribs.href);
-
+        // 영상 제목
+        // $('.yt-ui-ellipsis')[i].children[i].data.trim
+        console.log(($('.yt-ui-ellipsis')[i].children[0].data.trim()));
+      }
     } else {
       console.error(error);
     }
