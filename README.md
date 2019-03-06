@@ -44,6 +44,7 @@ Select Download Path를 클릭하면 다운로드할 경로를 선택할 수 있
 ## 참고
 
 - [ytdl-core ffmpeg exam](https://github.com/lleellee0/node-ytdl-core/blob/master/example/ffmpeg.js) - ytdl-core ffmpeg 예제
+- [ffmpeg](https://www.ffmpeg.org/) - FFMPEG 사용하여 인코딩
 - [fluent-ffmpeg](https://www.npmjs.com/package/fluent-ffmpeg) - NPM fluent-ffmpeg
 - [ffmpeg-static](https://www.npmjs.com/package/ffmpeg-static) - NPM ffmpeg-static
 - [node fs](https://nodejs.org/api/fs.html) - Node.js fs.unlink, fs.createWriteStream
