@@ -18,7 +18,17 @@ $(inputRealPath).on('change', function(event) {
 });
 
 const videoDownloadSeq = (video, arr, i) => {
-  log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
+  if(arr[i].title === '[비공개 동영상]') {
+    log.addErrorLog(`이 영상은 비공개 영상입니다. 다운로드 받을 수 없습니다. 다음 영상 다운로드를 진행합니다.`);
+    if(++i < arr.length)
+      videoDownloadSeq(video, arr, i);  //  다음 영상 다운로드
+    else
+      log.addLog(`완료되었습니다.`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
+    return;
+  } else {
+    log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
+  }
+  
   video = ytdl(arr[i].url);
   video.pipe(fs.createWriteStream(arr[i].path));
   video.on('end', () => { // 현재 진행중인 영상이 끝나면,
