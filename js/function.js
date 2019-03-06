@@ -17,6 +17,18 @@ $(inputRealPath).on('change', function(event) {
   $(inputFakePath).val(inputRealPath.files[0].path);
 });
 
+const videoDownloadSeq = (video, arr, i) => {
+  log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
+  video = ytdl(arr[i].url);
+  video.pipe(fs.createWriteStream(arr[i].path));
+  video.on('end', () => {
+    if(++i < arr.length)
+      videoDownload(video, arr, i);
+    else
+      log.addLog(`완료되었습니다.`);
+  });
+}
+
 const downloadYoutube = () => {
   log.addLog(`다운로드를 시작합니다. 다운로드가 안될 경우 입력하신 값들을 다시 확인하세요.(특히 해당 URL이 재생목록이 맞는지 확인바랍니다.)`);
 
@@ -28,21 +40,19 @@ const downloadYoutube = () => {
   // 재생 목록은 window["ytInitialData"] 에 존재
   request({
     uri:playListUrl,
-  }, async (error, response, body) => {
+  }, (error, response, body) => {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
-      for(let i = 0; i < $('.playlist-video').length; i++) {
-        log.addLog(`다음 파일을 진행중입니다. ${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`);
-        await ytdl('https://www.youtube.com' + $('.playlist-video')[i].attribs.href)
-          .pipe(fs.createWriteStream(`${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.${format}`))
-        // 영상 URL
-        // 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href
-        console.log('https://www.youtube.com' + $('.playlist-video')[i].attribs.href);
+      let arr = [];
 
-        // 영상 제목
-        // $('.yt-ui-ellipsis')[i].children[i].data.trim
-        console.log($('.yt-ui-ellipsis')[i].children[0].data.trim());
+      for(let i = 0; i < $('.playlist-video').length; i++) {
+        arr.push({url : 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href,
+          title : `${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
+          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.${format}`
+        });
       }
+
+      videoDownloadSeq(null, arr, 0);  // 다운로드 시작
     } else {
       console.error(error);
     }
