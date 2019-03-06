@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "ffmpeg-static": "^2.4.0",
+    "fluent-ffmpeg": "^2.1.2",
     "ytdl-core": "^0.29.1"
   }
 }
