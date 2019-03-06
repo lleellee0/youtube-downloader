@@ -21,11 +21,11 @@ const videoDownloadSeq = (video, arr, i) => {
   log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
   video = ytdl(arr[i].url);
   video.pipe(fs.createWriteStream(arr[i].path));
-  video.on('end', () => {
+  video.on('end', () => { // 현재 진행중인 영상이 끝나면,
     if(++i < arr.length)
-      videoDownloadSeq(video, arr, i);
+      videoDownloadSeq(video, arr, i);  //  다음 영상 다운로드
     else
-      log.addLog(`완료되었습니다.`);
+      log.addLog(`완료되었습니다.`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
   });
 }
 
