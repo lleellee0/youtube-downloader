@@ -23,7 +23,7 @@ const videoDownloadSeq = (video, arr, i) => {
   video.pipe(fs.createWriteStream(arr[i].path));
   video.on('end', () => {
     if(++i < arr.length)
-      videoDownload(video, arr, i);
+      videoDownloadSeq(video, arr, i);
     else
       log.addLog(`완료되었습니다.`);
   });
