@@ -2,18 +2,28 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Youtube Downloader</title>
+    <!-- CSS by https://codepen.io/frytyler/pen/EGdtg -->
+    <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
+    <span style="font-size: 14px; color: white;" onclick="window.open('https://github.com/lleellee0/youtube-downloader', '_blank')">How to use?</span>
+    <div class="download">
+    	<h1>Youtube Downloader</h1>
+        <form method="post" onsubmit="return downloadYoutube();">
+          <input id="playListUrl" class="input-text" type="text" name="playListUrl" placeholder="Play List URL" required="required"/>
+          <!-- <input id="format" class="input-text" type="text" name="format" placeholder="Format(ex. mp3, mp4) // It's under development." required="required" disabled/> -->
+          <input id="fake-path" class="input-text" type="path" placeholder="Select Download Path" required="required"/>
+          <input id="path" type="file" name="path" placeholder="Download Path" webkitdirectory/>
+          <button id="download" type="submit" class="btn btn-primary btn-block btn-large">
+            Start Download</button>
+        </form>
+        <div>
+          <textarea id="logArea" class="input-text" style="height: 150px; resize: none;" disabled></textarea>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="./js/function.js"></script>
   </body>
 </html>
