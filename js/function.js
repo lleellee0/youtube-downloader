@@ -3,6 +3,8 @@ const fs = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
 const ytdl = require('ytdl-core');
+const ffmpegPath = require('ffmpeg-static').path;
+const ffmpeg = require('fluent-ffmpeg');
 
 // Add Event Lintener
 let inputFakePath = document.getElementById("fake-path");
@@ -20,22 +22,32 @@ $(inputRealPath).on('change', function(event) {
 const videoDownloadSeq = (video, arr, i) => {
   if(arr[i].title === '[비공개 동영상]') {
     log.addErrorLog(`이 영상은 비공개 영상입니다. 다운로드 받을 수 없습니다. 다음 영상 다운로드를 진행합니다.`);
-    if(++i < arr.length)
-      videoDownloadSeq(video, arr, i);  //  다음 영상 다운로드
+    if(i < arr.length - 1)
+      videoDownloadSeq(video, arr, i+1);  //  다음 영상 다운로드
     else
-      log.addLog(`완료되었습니다.`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
+      log.addLog(`다운로드가 완료되었습니다.(mp3를 다운로드 중인 경우 아직 인코딩이 진행중입니다.)`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
     return;
-  } else {
+  } else
     log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
-  }
   
   video = ytdl(arr[i].url);
-  video.pipe(fs.createWriteStream(arr[i].path));
+  video.pipe(fs.createWriteStream(`${arr[i].path}.mp4`));
   video.on('end', () => { // 현재 진행중인 영상이 끝나면,
-    if(++i < arr.length)
-      videoDownloadSeq(video, arr, i);  //  다음 영상 다운로드
+    if(i < arr.length - 1) {
+      if(arr[i].format !== 'mp4')
+        ffmpeg(`${arr[i].path}.mp4`)
+          .setFfmpegPath(ffmpegPath)
+          .on('end', (stdout, stderr) => {
+            fs.unlink(`${arr[i].path}.mp4`, (err) => {if(err)throw err;});
+            log.addLog(`${arr[i].path}.${arr[i].format}의 변환이 완료되었습니다.`);
+          })
+          .toFormat(arr[i].format)
+          .output(fs.createWriteStream(`${arr[i].path}.${arr[i].format}`))
+          .run();
+      videoDownloadSeq(video, arr, i+1);  //  다음 영상 다운로드
+    }
     else
-      log.addLog(`완료되었습니다.`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
+      log.addLog(`다운로드가 완료되었습니다.(mp3를 다운로드 중인 경우 아직 인코딩이 진행중입니다.)`);  // 더 이상 다운받을 영상이 없다면 완료되었습니다. 출력
   });
 }
 
@@ -58,7 +70,8 @@ const downloadYoutube = () => {
       for(let i = 0; i < $('.playlist-video').length; i++) {
         arr.push({url : 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href,
           title : `${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
-          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.mp4`
+          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
+          format : format
         });
       }
 
