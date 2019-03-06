@@ -58,7 +58,7 @@ const downloadYoutube = () => {
       for(let i = 0; i < $('.playlist-video').length; i++) {
         arr.push({url : 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href,
           title : `${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
-          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.${format}`
+          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}.mp4`
         });
       }
 
