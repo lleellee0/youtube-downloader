@@ -31,18 +31,18 @@ const videoDownloadSeq = (video, arr, i) => {
     log.addLog(`다음 파일을 진행중입니다. ${arr[i].title}`);
   
   video = ytdl(arr[i].url);
-  video.pipe(fs.createWriteStream(`${arr[i].path}.mp4`));
+  video.pipe(fs.createWriteStream(`${arr[i].path + arr[i].title.replace(/[\\/:*?"<>|]/g, " ")}.mp4`)); // \ / : * ? " < > | 파일 이름으로 불가능하기 때문에 공백으로 만듬
   video.on('end', () => { // 현재 진행중인 영상이 끝나면,
     if(i < arr.length - 1) {
-      if(arr[i].format !== 'mp4')
-        ffmpeg(`${arr[i].path}.mp4`)
+      if(arr[i].format !== 'mp4') // mp4가 아닌 다른 형식이라면 해당 mp4 파일을 해당 형식으로 바꾸고 원래 파일 삭제
+        ffmpeg(`${arr[i].path + arr[i].title.replace(/[\\/:*?"<>|]/g, " ")}.mp4`)
           .setFfmpegPath(ffmpegPath)
           .on('end', (stdout, stderr) => {
-            fs.unlink(`${arr[i].path}.mp4`, (err) => {if(err)throw err;});
-            log.addLog(`${arr[i].path}.${arr[i].format}의 변환이 완료되었습니다.`);
+            fs.unlink(`${arr[i].path + arr[i].title.replace(/[\\/:*?"<>|]/g, " ")}.mp4`, (err) => {if(err)throw err;});
+            log.addLog(`${arr[i].path + arr[i].title.replace(/[\\/:*?"<>|]/g, " ")}.${arr[i].format}의 변환이 완료되었습니다.`);
           })
           .toFormat(arr[i].format)
-          .output(fs.createWriteStream(`${arr[i].path}.${arr[i].format}`))
+          .output(fs.createWriteStream(`${arr[i].path + arr[i].title.replace(/[\\/:*?"<>|]/g, " ")}.${arr[i].format}`))
           .run();
       videoDownloadSeq(video, arr, i+1);  //  다음 영상 다운로드
     }
@@ -70,7 +70,7 @@ const downloadYoutube = () => {
       for(let i = 0; i < $('.playlist-video').length; i++) {
         arr.push({url : 'https://www.youtube.com' + $('.playlist-video')[i].attribs.href,
           title : `${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
-          path : `${path}\\${$('.yt-ui-ellipsis')[i].children[0].data.trim()}`,
+          path : `${path}\\`,
           format : format
         });
       }
